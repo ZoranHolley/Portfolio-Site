@@ -31,11 +31,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # 5. Copy the fresh dist/ into the repo
-      - name: Copy build to project sub-folder
+      # 5. Copy the fresh dist/ into the repo (overwrite old files)
+      - name: Copy build output
         run: |
-          rm -rf ../../projects/weather-app/*
           cp -r dist/* ../../projects/weather-app/
+
 
       # 6. Commit & push the built files
       - name: Commit & push
