@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
+  // Add this line
+  base: '/Portfolio-Site/projects/weather-app/', 
   plugins: [react()],
-  // 👇 tell Vite the *public* path at which your app will live
-  base: "/Portfolio-Site/projects/weather-app/",
-});
-
+})
