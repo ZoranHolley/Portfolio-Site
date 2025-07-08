@@ -9,37 +9,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: # Grant write permissions to the GITHUB_TOKEN
+      contents: write
 
     defaults:
       run:
-        working-directory: projects/weather-app   # all run commands happen here
+        working-directory: projects/weather-app
 
     steps:
-      # 1 Checkout repo
       - uses: actions/checkout@v4
 
-      # 2 Node setup (match your local version)
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # 3 (Opt.) expose OpenWeather API key to the build
       - name: Inject VITE_WEATHER_KEY secret
         run: echo "VITE_WEATHER_KEY=${{ secrets.VITE_WEATHER_KEY }}" >> $GITHUB_ENV
 
-      # 4 Install deps & build production bundle
       - run: npm ci
       - run: npm run build
 
-      # 5 Copy fresh dist/ into repo
       - name: Copy build output to tracked folder
         run: |
-          cp -r dist/* ../../projects/weather-app/
+          # This step seems redundant as the build output is already in the repo structure.
+          # Consider if you really need to copy files that are already in place.
+          # If the build output is inside `projects/weather-app/dist`, you can directly commit from there.
+          cp -r dist/* ../../projects/weather-app/dist/
 
-      # 6 Commit & push only the built files
       - name: Commit and push build
         run: |
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f ../../projects/weather-app/dist/*
           git commit -m "chore: update weather-app build [skip ci]" || echo "No changes to commit"
