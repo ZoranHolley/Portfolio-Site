@@ -12,30 +12,32 @@ jobs:
 
     defaults:
       run:
-        working-directory: projects/weather-app  # all run steps execute here
+        working-directory: projects/weather-app   # all run steps execute here
 
     steps:
       # 1. Check out code
       - uses: actions/checkout@v4
 
-      # 2. Set up Node (matches your local version)
+      # 2. Set up Node
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
--       name: Inject env
+
+      # 3. Inject the OpenWeather secret (optional—only if you've added it)
+      - name: Inject env
         run: echo "VITE_WEATHER_KEY=${{ secrets.VITE_WEATHER_KEY }}" >> $GITHUB_ENV
 
-      # 3. Install & build
+      # 4. Install & build
       - run: npm ci
       - run: npm run build
 
-      # 4. Copy the fresh dist/ into the repo *
+      # 5. Copy the fresh dist/ into the repo
       - name: Copy build to project sub-folder
         run: |
           rm -rf ../../projects/weather-app/*
           cp -r dist/* ../../projects/weather-app/
 
-      # 5. Commit the built files back to main (skip a loop with [skip ci])
+      # 6. Commit & push the built files
       - name: Commit & push
         run: |
           git config user.name  "github-actions[bot]"
