@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: # Grant write permissions to the GITHUB_TOKEN
+    permissions:
       contents: write
 
     defaults:
@@ -29,14 +29,6 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Copy build output to tracked folder
-        run: |
-          # This step seems redundant as the build output is already in the repo structure.
-          # Consider if you really need to copy files that are already in place.
-          # If the build output is inside `projects/weather-app/dist`, you can directly commit from there.
-          cp -r dist/* ../../projects/weather-app/dist/
-
-      # 5 Commit & push only the built files (no copy step needed)
       - name: Commit and push build
         run: |
           git config user.name  "github-actions[bot]"
