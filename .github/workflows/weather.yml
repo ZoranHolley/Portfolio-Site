@@ -36,10 +36,11 @@ jobs:
           # If the build output is inside `projects/weather-app/dist`, you can directly commit from there.
           cp -r dist/* ../../projects/weather-app/dist/
 
+      # 5 Commit & push only the built files (no copy step needed)
       - name: Commit and push build
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f ../../projects/weather-app/dist/*
+          git add -f dist/*
           git commit -m "chore: update weather-app build [skip ci]" || echo "No changes to commit"
           git push
